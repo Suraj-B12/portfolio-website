@@ -1,26 +1,254 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------ */
+/*  Design tokens — Ember (warm charcoal + gold + rust)                */
+/* ------------------------------------------------------------------ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Surfaces — deep ember charcoal */
+  --bg-primary: #151210;   /* deep brown-black base */
+  --bg-surface: #1e1a17;   /* lifted surface for cards */
+  --bg-deep:    #0e0c0a;   /* deepest shadow, used for depth */
+  --bg-warm:    #f2ead8;   /* warm parchment for light sections */
+  --bg-warm-deep: #e6dcc6; /* deeper parchment surface */
+
+  /* Text on dark — golden cream */
+  --fg-primary:   #ddd0b8;
+  --fg-secondary: rgba(221, 208, 184, 0.60);
+  --fg-muted:     rgba(221, 208, 184, 0.38);
+  --fg-faint:     rgba(221, 208, 184, 0.14);
+  --border-dark:  rgba(221, 208, 184, 0.09);
+
+  /* Text on warm paper — ember soot */
+  --fg-warm-primary:   #1a1714;
+  --fg-warm-secondary: rgba(26, 23, 20, 0.65);
+  --fg-warm-muted:     rgba(26, 23, 20, 0.40);
+  --border-warm:       rgba(26, 23, 20, 0.10);
+
+  /* Accent — warm gold primary, deep rust for high-impact moments */
+  --accent:        #c49a5c;  /* warm gold — links, active states, highlights */
+  --accent-hover:  #d4aa6c;  /* lighter gold on hover */
+  --accent-deep:   #a84632;  /* deep rust — used on warm-section hovers */
+
+  /* Skill tag colors — ember-adjusted */
+  --tag-blue:   #c49a5c;  /* warm gold (replaces cold blue) */
+  --tag-teal:   #7a8c65;  /* olive */
+  --tag-pink:   #a84632;  /* rust */
+  --tag-amber:  #c49a5c;  /* gold */
+  --tag-gray:   #998a78;  /* warm gray */
+
+  /* Typography */
+  --font-display: var(--font-satoshi);
+  --font-body:    var(--font-satoshi);
+  --font-mono:    var(--font-jetbrains);
+
+  /* Spacing */
+  --nav-height:     88px;
+  --section-pad-y:  clamp(6rem, 12vh, 10rem);
+  --container-x:    clamp(1.5rem, 5vw, 5rem);
 }
+
+/* ------------------------------------------------------------------ */
+/*  Tailwind theme                                                     */
+/* ------------------------------------------------------------------ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg:         var(--bg-primary);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-deep:    var(--bg-deep);
+  --color-bg-warm:    var(--bg-warm);
+  --color-bg-warm-deep: var(--bg-warm-deep);
+
+  --color-fg:            var(--fg-primary);
+  --color-fg-secondary:  var(--fg-secondary);
+  --color-fg-muted:      var(--fg-muted);
+  --color-fg-faint:      var(--fg-faint);
+  --color-border-dark:   var(--border-dark);
+
+  --color-fg-warm:            var(--fg-warm-primary);
+  --color-fg-warm-secondary:  var(--fg-warm-secondary);
+  --color-fg-warm-muted:      var(--fg-warm-muted);
+  --color-border-warm:        var(--border-warm);
+
+  --color-accent:       var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-deep:  var(--accent-deep);
+
+  --color-tag-blue:  var(--tag-blue);
+  --color-tag-teal:  var(--tag-teal);
+  --color-tag-pink:  var(--tag-pink);
+  --color-tag-amber: var(--tag-amber);
+  --color-tag-gray:  var(--tag-gray);
+
+  --font-display: var(--font-display);
+  --font-sans:    var(--font-body);
+  --font-mono:    var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ------------------------------------------------------------------ */
+/*  Base                                                               */
+/* ------------------------------------------------------------------ */
+
+html {
+  background: var(--bg-primary);
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--fg-primary);
+  font-family: var(--font-body), system-ui, -apple-system, sans-serif;
+  font-feature-settings: "ss01", "ss02", "cv01", "cv11";
+  overscroll-behavior-y: none;
+}
+
+/* Hide native cursor over interactive + everywhere on desktop only when
+   a custom cursor is mounted. The CustomCursor component flips this. */
+body[data-custom-cursor="true"],
+body[data-custom-cursor="true"] * {
+  cursor: none !important;
+}
+/* Keep native cursor on text inputs for accessibility */
+body[data-custom-cursor="true"] input,
+body[data-custom-cursor="true"] textarea {
+  cursor: text !important;
+}
+
+/* Lenis smooth scroll reset */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* Selection */
+::selection {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Scrollbar — hidden because we have our own ScrollProgress bar */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+html {
+  scrollbar-width: none;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Utility primitives                                                 */
+/* ------------------------------------------------------------------ */
+
+@utility container-x {
+  padding-inline: var(--container-x);
+}
+
+@utility section-pad {
+  padding-block: var(--section-pad-y);
+}
+
+@utility mono-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Link / CTA hover — one treatment shared across the site            */
+/* ------------------------------------------------------------------ */
+/*  Animated underline on the left, colour shift to --accent. The
+    underline scales from 0 → 100 on hover. Applies to any element
+    with [data-link] so we don't need per-section class soup.          */
+
+[data-link] {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35em;
+  color: inherit;
+  transition: color 240ms ease;
+}
+[data-link]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 380ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              background-color 240ms ease;
+}
+[data-link]:hover,
+[data-link]:focus-visible {
+  color: var(--accent);
+}
+[data-link]:hover::after,
+[data-link]:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Dark-on-warm sections invert the hover colour so it stays visible
+   against the paper background. */
+[data-theme="warm"] [data-link]:hover,
+[data-theme="warm"] [data-link]:focus-visible {
+  color: var(--accent-deep);
+}
+
+/* Reduced-motion users get an instant underline, no scale animation. */
+@media (prefers-reduced-motion: reduce) {
+  [data-link]::after {
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Terminal cursor blink                                              */
+/* ------------------------------------------------------------------ */
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Motion                                                             */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  body[data-custom-cursor="true"],
+  body[data-custom-cursor="true"] * {
+    cursor: auto !important;
+  }
 }
