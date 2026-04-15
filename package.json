@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "deploy:assets": "bash scripts/deploy-assets.sh"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
