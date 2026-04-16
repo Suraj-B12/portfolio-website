@@ -17,7 +17,7 @@ set -euo pipefail
 cd /home/app
 git clone "${REPO_URL}" portfolio
 cd portfolio
-npm install
+npm ci
 npm run build
 pm2 start ecosystem.config.js
 pm2 save
