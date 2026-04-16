@@ -19,7 +19,7 @@
 set -euo pipefail
 
 REPO_URL="https://github.com/Suraj-B12/portfolio-website.git"
-CDN_URL="https://REPLACE-ME.cloudfront.net"
+CDN_URL="https://dgfh5eu4m363q.cloudfront.net"
 
 # ---- System packages ----------------------------------------------------
 export DEBIAN_FRONTEND=noninteractive
