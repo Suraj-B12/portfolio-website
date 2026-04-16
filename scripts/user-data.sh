@@ -39,7 +39,7 @@ cd /home/app
 git clone "${REPO_URL}" portfolio
 cd portfolio
 export NEXT_PUBLIC_ASSET_PREFIX="${CDN_URL}"
-npm ci
+npm install
 npm run build
 pm2 start ecosystem.config.js
 pm2 save
